@@ -14,8 +14,13 @@ from src.tictactoe.events import events
 
 def register_ws_extensions(app: Flask) -> Tuple[Sock, Server]:
     """Register WS Extensions"""
+    server = get_server()
+    return Sock(app), server
+
+
+def get_server():
     emitter = WSAdapter()
     for event in events:
         emitter.add_event(event())
-    server = Server(emitter)
-    return Sock(app), server
+    server = Server.instance(emitter)
+    return server

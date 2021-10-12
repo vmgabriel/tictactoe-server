@@ -16,10 +16,22 @@ class MessageType(str, Enum):
     BROADCAST = "broadcast"
 
 
-class Server:
+class Server(object):
+    """Server Application, apply singleton and way for use server class is across static method instance"""
+    _instance = None
+
+    @staticmethod
+    def instance(emitter: WSAdapter):
+        if Server._instance == None:
+            Server(emitter)
+        return Server._instance
+
     def __init__(self, emitter: WSAdapter):
         self.channels: List[Channel] = []
         self.emitter = emitter
+
+        if Server._instance == None:
+            Server._instance = self
 
     def get_channel(self, route: str) -> Channel:
         for channel in self.channels:

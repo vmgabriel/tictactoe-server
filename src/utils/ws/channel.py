@@ -66,3 +66,11 @@ class Channel:
 
     def __repr__(self):
         return str(self)
+
+    def to_json(self) -> dict:
+        return {
+            "route": self.route,
+            "status": self.instance.status.value if self.instance else "waiting",
+            "count_consumers": len(list(self.consumers)),
+            "consumers": list(self.consumers.keys()),
+        }
